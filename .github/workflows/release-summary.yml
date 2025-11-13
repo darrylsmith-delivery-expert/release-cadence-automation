@@ -1,0 +1,23 @@
+name: Release Summary
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate_summary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate release summary
+        run: |
+          echo "Release Summary for $(date)" > release-summary.txt
+          git log -5 --pretty=format:'- %s' >> release-summary.txt
+
+      - name: Upload summary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-summary
+          path: release-summary.txt
